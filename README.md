@@ -90,7 +90,7 @@ OrbitMind AI aims to bridge this gap by integrating AI to offer meaningful, adap
 | **Team Name** | CSE4104-7D-T04 |
 | **Section** | 7D |
 | **Project Title** | OrbitMind AI |
-| **Team Leader** | Md. Imroz Newaz |
+| **Team Leader** | Md. Imroz Newaz (ID: 11220321052) |
 | **Member List** | Md. Imroz Newaz (ID: 11220321052) <br> Md. Mahfuzur Rahman Hridoy (ID: 11230121186) <br> Fatema Parvin Kanta (ID: 11230121192) <br> Zeniya Naznin (ID: 11230121138) |
 | **GitHub Repository** | [https://github.com/Mahfuz-Hridoy/cse4104-7d-t04-orbitmind-ai](https://github.com/Mahfuz-Hridoy/cse4104-7d-t04-orbitmind-ai.git) |
 
