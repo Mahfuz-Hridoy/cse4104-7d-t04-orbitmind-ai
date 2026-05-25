@@ -41,7 +41,7 @@ OrbitMind AI aims to bridge this gap by integrating AI to offer meaningful, adap
 ## Proposed Features
 ### Core Functionalities
 - **User Authentication**
-- **AI Chatbot (LLM-powered)**
+- **AI Chatbot **
 - **Dashboard for productivity tracking**
 - **Task & Habit Manager**
 - **AI-generated recommendations**
