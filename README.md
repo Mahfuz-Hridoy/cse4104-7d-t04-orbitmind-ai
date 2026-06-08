@@ -84,6 +84,30 @@ OrbitMind AI aims to bridge this gap by integrating AI to offer meaningful, adap
 
 ---
 
+##Repository Structure
+```text
+/orbitmind-ai/
+  /backend/                 # API Server
+    main.js
+    server.js
+  /documentation/SW3/       # Course Deliverables & SRS
+    CSE4104-7D-T04_ArchitectureDiagram.pdf
+    CSE4104-7D-T04_ERDiagram.pdf
+    CSE4104-7D-T04_Proposal.pdf
+    CSE4104-7D-T04_SRS.pdf
+    CSE4104-7D-T04_TeamInfo.pdf
+    CSE4104-7D-T04_UseCaseDiagram.pdf
+    CSE4104-7D-T04_Week01.pdf
+  /frontend/                # Client-Side Interface
+    index.html
+    script.js
+    style.css
+  /testing/                 # Testing modules
+    input.js
+  README.md                 # Project Documentation
+```
+---
+
 ## Team Information
 | Field | Details |
 |-------|---------|
