@@ -138,16 +138,41 @@ const getMockResponse = (prompt) => {
 
 // ─── Gemini Client ────────────────────────────────────────────────────────────
 
+// ─── Helper Utilities ─────────────────────────────────────────────────────────
+
+/**
+ * Strips markdown code block formatting (e.g. ```json ... ```) from JSON output.
+ * @param {string} text
+ * @returns {string}
+ */
+const cleanJSONString = (text) => {
+  if (!text) return '';
+  let cleaned = text.trim();
+  if (cleaned.startsWith('```')) {
+    cleaned = cleaned.replace(/^```(?:json)?\s*/i, '').replace(/\s*```$/i, '');
+  }
+  return cleaned.trim();
+};
+
+const MODELS_TO_TRY = [
+  'gemini-2.5-flash',
+  'gemini-2.5-pro',
+  'gemini-flash-latest',
+  'gemini-2.0-flash-lite',
+  'gemini-2.0-flash',
+  'gemini-1.5-flash'
+];
+
+// ─── Gemini Client ────────────────────────────────────────────────────────────
+
 let genAI = null;
 
-if (process.env.GEMINI_API_KEY) {
-  genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-} else {
-  console.warn(
-    '[aiService] WARNING: GEMINI_API_KEY is not set. ' +
-    'Running in mock mode — add the key to backend/.env for live AI responses.'
-  );
-}
+const getGenAIClient = (apiKey) => {
+  if (!genAI) {
+    genAI = new GoogleGenerativeAI(apiKey);
+  }
+  return genAI;
+};
 
 // ─── Main Export ──────────────────────────────────────────────────────────────
 
@@ -168,23 +193,47 @@ const generateJSONContent = async (systemInstruction, prompt) => {
     throw new TypeError('generateJSONContent: "prompt" must be a non-empty string.');
   }
 
-  // No API key — use mock directly
-  if (!genAI) {
+  const apiKey = process.env.GEMINI_API_KEY ? process.env.GEMINI_API_KEY.trim() : '';
+
+  if (!apiKey || apiKey.includes('YOUR_GEMINI_API_KEY')) {
+    console.warn(
+      '[aiService] WARNING: GEMINI_API_KEY is not set or using default placeholder. ' +
+      'Running in mock mode — set a valid GEMINI_API_KEY in backend/.env for live AI responses.'
+    );
     return getMockResponse(prompt);
   }
 
-  try {
-    const model = genAI.getGenerativeModel({
-      model: 'gemini-2.5-flash',
-      systemInstruction,
-      generationConfig: {
-        responseMimeType: 'application/json',
-      },
-    });
 
-    const result   = await model.generateContent(prompt);
-    const text     = result.response.text();
-    return JSON.parse(text);
+  try {
+    const aiClient = getGenAIClient(apiKey);
+    let text = '';
+    let lastError = null;
+
+    for (const modelName of MODELS_TO_TRY) {
+      try {
+        const model = aiClient.getGenerativeModel({
+          model: modelName,
+          systemInstruction,
+          generationConfig: {
+            responseMimeType: 'application/json',
+          },
+        });
+
+        const result = await model.generateContent(prompt);
+        text = result.response.text();
+        if (text) break;
+      } catch (err) {
+        lastError = err;
+        console.warn(`[aiService] Model "${modelName}" failed: ${err.message}. Trying next fallback model...`);
+      }
+    }
+
+    if (!text) {
+      throw lastError || new Error('All Gemini model endpoints failed to return content.');
+    }
+
+    const cleanedText = cleanJSONString(text);
+    return JSON.parse(cleanedText);
 
   } catch (error) {
     console.error('[aiService] Gemini API error — falling back to mock:', error.message);
@@ -197,5 +246,6 @@ module.exports = {
   // Exported for unit testing
   getMockResponse,
   detectPromptType,
+  cleanJSONString,
   PROMPT_TYPES,
 };
