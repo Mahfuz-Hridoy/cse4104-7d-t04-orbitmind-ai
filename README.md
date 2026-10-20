@@ -75,7 +75,7 @@ OrbitMind AI aims to bridge this gap by integrating AI to offer meaningful, adap
 - Git & GitHub  
 
 ### **Deployment Target**
--Render / Railway / Vercel 
+-Vercel 
 
 ---
 
