@@ -87,7 +87,7 @@ OrbitMind AI aims to bridge this gap by integrating AI to offer meaningful, adap
 ---
 
 ## Project Link
-**[https://orbitmindai-frontend.vercel.app/**
+**https://orbitmindai-frontend.vercel.app/**
 
 ---
 
